@@ -639,11 +639,11 @@ def publish_discovery(dev, sub=''):
     elif dev == 'light':
         for num in range(1, int(config.get('User', 'light_count'))+1):
             #ha_topic = 'homeassistant/light/kocom_livingroom_light1/config'
-            topic = 'homeassistant/light/kocom_livingroom_light{}/config'.format(num)
+            topic = 'homeassistant/light/kocom_{}_light{}/config'.format(num)
             payload = {
-                'name': 'Kocom Livingroom Light{}'.format(num),
-                'cmd_t': 'kocom/livingroom/light/{}/command'.format(num),
-                'stat_t': 'kocom/livingroom/light/state',
+                'name': 'Kocom {} Light{}'.format(num),
+                'cmd_t': 'kocom/{}/light/{}/command'.format(num),
+                'stat_t': 'kocom/{}/light/state',
                 'stat_val_tpl': '{{ value_json.light_' + str(num) + ' }}',
                 'pl_on': 'on',
                 'pl_off': 'off',
@@ -676,7 +676,7 @@ def publish_discovery(dev, sub=''):
             'curr_temp_t': 'kocom/room/thermo/{}/state'.format(num),
             'curr_temp_tpl': '{{ value_json.cur_temp }}',
             'modes': ['off', 'heat'],
-            'min_temp': 20,
+            'min_temp': 18,
             'max_temp': 25,
             'ret': 'false',
             'qos': 0,
