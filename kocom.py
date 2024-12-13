@@ -639,16 +639,16 @@ def publish_discovery(dev, sub=''):
     elif dev == 'light':
         for num in range(1, int(config.get('User', 'light_count'))+1):
             #ha_topic = 'homeassistant/light/kocom_livingroom_light1/config'
-            topic = 'homeassistant/light/kocom_{}_light{}/config'.format(num)
+            topic = 'homeassistant/light/kocom_{}_light{}/config'.format(sub, num)
             payload = {
-                'name': 'Kocom {} Light{}'.format(num),
-                'cmd_t': 'kocom/{}/light/{}/command'.format(num),
-                'stat_t': 'kocom/{}/light/state',
+                'name': 'Kocom {} Light{}'.format(sub, num),
+                'cmd_t': 'kocom/{}/light/{}/command'.format(sub, num),
+                'stat_t': 'kocom/{}/light/state'.format(sub),
                 'stat_val_tpl': '{{ value_json.light_' + str(num) + ' }}',
                 'pl_on': 'on',
                 'pl_off': 'off',
                 'qos': 0,
-                'uniq_id': '{}_{}_{}{}'.format('kocom', 'wallpad', dev, num),
+                'uniq_id': '{}_{}_{}{}'.format('kocom', sub, dev, num),
                 'device': {
                     'name': '코콤 스마트 월패드',
                     'ids': 'kocom_smart_wallpad',
