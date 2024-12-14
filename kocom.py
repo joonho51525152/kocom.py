@@ -639,13 +639,14 @@ def publish_discovery(dev, sub=''):
         mqttc.publish(topic, json.dumps(payload))
         if logtxt != "" and config.get('Log', 'show_mqtt_publish') == 'True':
             logging.info(logtxt)
-    elif dev == 'switch':
+
+    elif dev == 'light':
                                   
         for num in range(1, int(config.get('User', 'light_count'))+1):
             #ha_topic = 'homeassistant/light/kocom_livingroom_light1/config'
-            topic = 'homeassistant/switch/kocom_{}_light{}/config'.format(sub, num)
+            topic = 'homeassistant/light/kocom_{}_light{}/config'.format(sub, num)
             payload = {
-                'name': 'Kocom {} Light{}'.format(sub, num),
+                'name': 'Kocom {} light{}'.format(sub, num),
                 'cmd_t': 'kocom/{}/light/{}/command'.format(sub, num),
                 'stat_t': 'kocom/{}/light/state'.format(sub),
                 'stat_val_tpl': '{{ value_json.light_' + str(num) + ' }}',
@@ -653,7 +654,7 @@ def publish_discovery(dev, sub=''):
                 'pl_off': 'off',
                 'qos': 0,
 #               'uniq_id': '{}_{}_{}{}'.format('kocom', 'wallpad', dev, num),      # 20221108 주석처리
-                'uniq_id': '{}_{}_{}{}'.format('kocom', sub, 'switch', num),            # 20221108 수정
+                'uniq_id': '{}_{}_{}{}'.format('kocom', sub, dev, num),            # 20221108 수정
                                                                     
                 'device': {
                     'name': '코콤 스마트 월패드',
@@ -667,6 +668,7 @@ def publish_discovery(dev, sub=''):
             mqttc.publish(topic, json.dumps(payload))
             if logtxt != "" and config.get('Log', 'show_mqtt_publish') == 'True':
                 logging.info(logtxt)
+
     elif dev == 'thermo':
         num= int(room_h_dic.get(sub))
         #ha_topic = 'homeassistant/climate/kocom_livingroom_thermostat/config'
