@@ -519,12 +519,14 @@ def packet_processor(p):
             mqttc.publish("kocom/room/thermo/" + p['dest_subid'] + "/state", json.dumps(state))
         elif p['dest'] == 'light' and p['cmd']=='state':
         #elif p['src'] == 'light' and p['cmd']=='state':
-            state = light_parse(p['value'])
-            logtxt='[MQTT publish|light] data[{}]'.format(state)
-            mqttc.publish("kocom/livingroom/light/state", json.dumps(state))
-            mqttc.publish("kocom/bedroom/light/state", json.dumps(state))
-            mqttc.publish("kocom/room1/light/state", json.dumps(state))
-            mqttc.publish("kocom/room2/light/state", json.dumps(state))
+            if p['src_room'] == 'livingroom':
+                 mqttc.publish("kocom/livingroom/light/state", json.dumps(state))
+            elif p['src_room'] == 'bedroom':
+                 mqttc.publish("kocom/bedroom/light/state", json.dumps(state))
+            elif p['src_room'] == 'room1':
+                 mqttc.publish("kocom/room1/light/state", json.dumps(state))
+             elif p['src_room'] == 'room2':
+                 mqttc.publish("kocom/room2/light/state", json.dumps(state))
             
             
         elif p['dest'] == 'fan' and p['cmd']=='state':
