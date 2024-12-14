@@ -511,24 +511,19 @@ def publish_status(p):
 def packet_processor(p):
     logtxt = ""
     if p['type']=='ack' and p['src']=='wallpad':  # ack from wallpad
-    #if p['type']=='send' and p['dest']=='wallpad':  # response packet to wallpad
         if p['dest'] == 'thermo' and p['cmd']=='state':
-        #if p['src'] == 'thermo' and p['cmd']=='state':
             state = thermo_parse(p['value'])
-            logtxt='[MQTT publish|thermo] room{} data[{}]'.format(p['dest_subid'], state)
+            logtxt = '[MQTT publish|thermo] room{} data[{}]'.format(p['dest_subid'], state)
             mqttc.publish("kocom/room/thermo/" + p['dest_subid'] + "/state", json.dumps(state))
         elif p['dest'] == 'light' and p['cmd']=='state':
-        #elif p['src'] == 'light' and p['cmd']=='state':
             if p['src_room'] == 'livingroom':
-                 mqttc.publish("kocom/livingroom/light/state", json.dumps(state))
+                mqttc.publish("kocom/livingroom/light/state", json.dumps(state))
             elif p['src_room'] == 'bedroom':
-                 mqttc.publish("kocom/bedroom/light/state", json.dumps(state))
+                mqttc.publish("kocom/bedroom/light/state", json.dumps(state))
             elif p['src_room'] == 'room1':
-                 mqttc.publish("kocom/room1/light/state", json.dumps(state))
-             elif p['src_room'] == 'room2':
-                 mqttc.publish("kocom/room2/light/state", json.dumps(state))
-            
-            
+                mqttc.publish("kocom/room1/light/state", json.dumps(state))
+            elif p['src_room'] == 'room2':
+                mqttc.publish("kocom/room2/light/state", json.dumps(state))
         elif p['dest'] == 'fan' and p['cmd']=='state':
         #elif p['src'] == 'fan' and p['cmd']=='state':
             state = fan_parse(p['value'])
