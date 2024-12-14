@@ -510,8 +510,8 @@ def publish_status(p):
 
 def packet_processor(p):
     logtxt = ""
-    if p['type']=='ack' and p['src']=='wallpad':  # ack from wallpad
-    #if p['type']=='send' and p['dest']=='wallpad':  # response packet to wallpad
+    #if p['type']=='ack' and p['src']=='wallpad':  # ack from wallpad
+    if p['type']=='send' and p['dest']=='wallpad':  # response packet to wallpad
         #if p['dest'] == 'thermo' and p['cmd']=='state':
         if p['src'] == 'thermo' and p['cmd']=='state':
             state = thermo_parse(p['value'])
