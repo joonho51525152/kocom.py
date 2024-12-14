@@ -430,14 +430,12 @@ def mqtt_on_message(mqttc, obj, msg):
         light_id = int(topic_d[3])
 
         # turn on/off multiple lights at once : e.g) kocom/livingroom/light/12/command
-        if light_id > 0:
-            while light_id > 0:
-                n = light_id % 10
-                value = value[:n*2-2] + onoff_hex + value[n*2:]
-                send_wait_response(dest=dev_id, value=value, log='light')
-                light_id = int(light_id/10)
-        else:
-            send_wait_response(dest=dev_id, value=value, log='light')
+        while light_id > 0:
+            n = light_id % 10
+            value = value[:n*2-2]+ onoff_hex + value[n*2:]
+            light_id = int(light_id/10)
+
+        send_wait_response(dest=dev_id, value=value, log='light')
 
     # gas off : kocom/livingroom/gas/command
     elif 'gas' in topic_d:
@@ -517,7 +515,8 @@ def packet_processor(p):
             state = thermo_parse(p['value'])
             logtxt='[MQTT publish|thermo] room{} data[{}]'.format(p['dest_subid'], state)
             mqttc.publish("kocom/room/thermo/" + p['dest_subid'] + "/state", json.dumps(state))
-        elif p['src'] == 'light' and p['cmd'] == 'state':
+        elif p['dest'] == 'light' and p['cmd']=='state':
+        #elif p['src'] == 'light' and p['cmd']=='state':
             state = light_parse(p['value'])
             logtxt='[MQTT publish|light] room[{}] data[{}]'.format(p['src_room'], state)
             mqttc.publish("kocom/{}/light/state".format(p['src_room']), json.dumps(state))
@@ -639,9 +638,7 @@ def publish_discovery(dev, sub=''):
         mqttc.publish(topic, json.dumps(payload))
         if logtxt != "" and config.get('Log', 'show_mqtt_publish') == 'True':
             logging.info(logtxt)
-
     elif dev == 'light':
-                                  
         for num in range(1, int(config.get('User', 'light_count'))+1):
             #ha_topic = 'homeassistant/light/kocom_livingroom_light1/config'
             topic = 'homeassistant/light/kocom_{}_light{}/config'.format(sub, num)
