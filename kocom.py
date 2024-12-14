@@ -592,7 +592,7 @@ def publish_discovery(dev, sub=''):
         if logtxt != "" and config.get('Log', 'show_mqtt_publish') == 'True':
             logging.info(logtxt)
     elif dev == 'gas':
-        topic = 'homeassistant/gas/kocom_wallpad_gas/config'
+        topic = 'homeassistant/switch/kocom_wallpad_gas/config'
         payload = {
             'name': 'Kocom Wallpad Gas',
             'cmd_t': 'kocom/livingroom/gas/command',
@@ -600,6 +600,7 @@ def publish_discovery(dev, sub=''):
             'val_tpl': '{{ value_json.state }}',
             'pl_on': 'on',
             'pl_off': 'off',
+            'ic': 'mdi:gas-cylinder',
             'qos': 0,
             'uniq_id': '{}_{}_{}'.format('kocom', 'wallpad', dev),
             'device': {
@@ -615,7 +616,7 @@ def publish_discovery(dev, sub=''):
         if logtxt != "" and config.get('Log', 'show_mqtt_publish') == 'True':
             logging.info(logtxt)
     elif dev == 'elevator':
-        topic = 'homeassistant/button/kocom_wallpad_elevator/config'
+        topic = 'homeassistant/switch/kocom_wallpad_elevator/config'
         payload = {
             'name': 'Kocom Wallpad Elevator',
             'cmd_t': "kocom/myhome/elevator/command",
@@ -623,6 +624,7 @@ def publish_discovery(dev, sub=''):
             'val_tpl': "{{ value_json.state }}",
             'pl_on': 'on',
             'pl_off': 'off',
+            'ic': 'mdi:elevator',
             'qos': 0,
             'uniq_id': '{}_{}_{}'.format('kocom', 'wallpad', dev),
             'device': {
@@ -638,6 +640,7 @@ def publish_discovery(dev, sub=''):
         if logtxt != "" and config.get('Log', 'show_mqtt_publish') == 'True':
             logging.info(logtxt)
     elif dev == 'light':
+                                  
         for num in range(1, int(config.get('User', 'light_count'))+1):
             #ha_topic = 'homeassistant/light/kocom_livingroom_light1/config'
             topic = 'homeassistant/light/kocom_{}_light{}/config'.format(sub, num)
@@ -649,7 +652,9 @@ def publish_discovery(dev, sub=''):
                 'pl_on': 'on',
                 'pl_off': 'off',
                 'qos': 0,
-                'uniq_id': '{}_{}_{}{}'.format('kocom', 'wallpad'', dev, num),
+#               'uniq_id': '{}_{}_{}{}'.format('kocom', 'wallpad', dev, num),      # 20221108 주석처리
+                'uniq_id': '{}_{}_{}{}'.format('kocom', sub, dev, num),            # 20221108 수정
+                                                                    
                 'device': {
                     'name': '코콤 스마트 월패드',
                     'ids': 'kocom_smart_wallpad',
