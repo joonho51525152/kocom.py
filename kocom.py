@@ -522,6 +522,11 @@ def packet_processor(p):
             state = light_parse(p['value'])
             logtxt='[MQTT publish|light] data[{}]'.format(state)
             mqttc.publish("kocom/livingroom/light/state", json.dumps(state))
+            mqttc.publish("kocom/bedroom/light/state", json.dumps(state))
+            mqttc.publish("kocom/room1/light/state", json.dumps(state))
+            mqttc.publish("kocom/room2/light/state", json.dumps(state))
+            
+            
         elif p['dest'] == 'fan' and p['cmd']=='state':
         #elif p['src'] == 'fan' and p['cmd']=='state':
             state = fan_parse(p['value'])
@@ -643,9 +648,9 @@ def publish_discovery(dev, sub=''):
                                   
         for num in range(1, int(config.get('User', 'light_count'))+1):
             #ha_topic = 'homeassistant/light/kocom_livingroom_light1/config'
-            topic = 'homeassistant/switch/kocom_{}_light{}/config'.format(sub, num)
+            topic = 'homeassistant/light/kocom_{}_light{}/config'.format(sub, num)
             payload = {
-                'name': 'Kocom {} Light{}'.format(sub, num),
+                'name': 'Kocom {} light{}'.format(sub, num),
                 'cmd_t': 'kocom/{}/light/{}/command'.format(sub, num),
                 'stat_t': 'kocom/{}/light/state'.format(sub),
                 'stat_val_tpl': '{{ value_json.light_' + str(num) + ' }}',
